@@ -22,17 +22,17 @@ class TokenManager:
         Defaults to ``~/.kanbanflow/tokens.json``.
     """
 
-    def __init__(self, token_file: Optional[Path] = None):
+    def __init__(self, token_file: Path = Path.home() / ".kanbanflow/tokens.json"):
         """Construct a TokenManager."""
-        self._tokens: Tokens = {}
 
-        if token_file is None:
-            self.token_file = Path.home() / ".kanbanflow/tokens.json"
-        else:
-            self.token_file = Path(token_file)
+        self.token_file = Path(token_file)
+
+        self._tokens: Tokens = {}
 
         if not self.token_file.exists():
             self._create_file()
+        else:
+            self._load_tokens()
 
     def _create_file(self):
         """Create the token file if it doesn't exist."""
